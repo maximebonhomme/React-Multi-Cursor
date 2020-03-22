@@ -55,6 +55,7 @@ Cursor.defaultProps = {
   style: cursorStyle
 }
 
+let RAF = null
 const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
   const cursorRefs = useRef([])
   const updatedCursors = []
@@ -67,7 +68,6 @@ const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
   let mouseTarget = { x: 0, y: 0 }
   let mouseLast = { x: 0, y: 0 }
   let mouse = { x: 0, y: 0 }
-  let RAF = null
 
   const mouseMove = e => {
     const x = e.clientX

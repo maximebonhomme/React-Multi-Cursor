@@ -1,9 +1,8 @@
 {
   "name": "react-multi-cursor",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Add multiple cursors to your react application.",
   "main": "index.js",
-  "module": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/babel src --out-file index.js"
@@ -14,6 +13,18 @@
   },
   "author": "Maxime Bonhomme <hello.bonhomme@gmail.com>",
   "license": "ISC",
+  "tags": [
+    "react",
+    "cursor"
+  ],
+  "keywords": [
+    "react",
+    "react-component",
+    "custom",
+    "cursor",
+    "cursors",
+    "smooth"
+  ],
   "bugs": {
     "url": "https://github.com/maximebonhomme/React-Multi-Cursor/issues"
   },
