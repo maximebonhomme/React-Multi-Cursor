@@ -1,0 +1,37 @@
+{
+  "name": "react-multi-cursor",
+  "version": "1.0.0",
+  "description": "Add multiple cursors to your react application.",
+  "main": "index.js",
+  "module": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src --out-file index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maximebonhomme/React-Multi-Cursor.git"
+  },
+  "author": "Maxime Bonhomme <hello.bonhomme@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maximebonhomme/React-Multi-Cursor/issues"
+  },
+  "homepage": "https://github.com/maximebonhomme/React-Multi-Cursor#readme",
+  "peerDependencies": {
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.8",
+    "react-dom": "^16.8"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.1",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.0",
+    "react-dom": "^16.0"
+  }
+}
