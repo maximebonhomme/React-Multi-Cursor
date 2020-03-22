@@ -1,6 +1,6 @@
 {
   "name": "react-multi-cursor",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Add multiple cursors to your react application.",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,9 @@
     "custom",
     "cursor",
     "cursors",
-    "smooth"
+    "smooth",
+    "ease",
+    "easing"
   ],
   "bugs": {
     "url": "https://github.com/maximebonhomme/React-Multi-Cursor/issues"
