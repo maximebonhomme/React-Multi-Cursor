@@ -1,54 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var cursorStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "10px",
-  height: "10px",
-  margin: "-7px 0 0 -7px",
-  backgroundColor: "black",
-  borderRadius: "50%"
-};
-
-var Cursor = _react["default"].forwardRef(function (_ref, ref) {
-  var style = _ref.style,
-      className = _ref.className;
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    ref: ref,
-    className: className,
-    style: style
-  });
-});
-
-Cursor.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  style: _propTypes["default"].object,
-  className: _propTypes["default"].string,
-  position: _propTypes["default"].shape({
-    x: _propTypes["default"].number.isRequired,
-    y: _propTypes["default"].number.isRequired
-  })
-};
-Cursor.defaultProps = {
-  className: "multi-cursor",
-  style: cursorStyle
-};
-var _default = Cursor;
-exports["default"] = _default;
-"use strict";
-
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
@@ -123,6 +74,7 @@ Cursor.defaultProps = {
   className: "multi-cursor",
   style: cursorStyle
 };
+var RAF = null;
 
 var MultiCursor = function MultiCursor(_ref2) {
   var cursors = _ref2.cursors,
@@ -131,8 +83,8 @@ var MultiCursor = function MultiCursor(_ref2) {
       onUpdate = _ref2.onUpdate;
   var cursorRefs = (0, _react.useRef)([]);
   var updatedCursors = [];
-  var windowWidth = window !== undefined ? window.innerWidth : 0;
-  var windowHeight = window !== undefined ? window.innerHeight : 0;
+  var windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+  var windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
   var center = {
     x: windowWidth / 2,
     y: windowHeight / 2
@@ -149,7 +101,6 @@ var MultiCursor = function MultiCursor(_ref2) {
     x: 0,
     y: 0
   };
-  var RAF = null;
 
   var mouseMove = function mouseMove(e) {
     var x = e.clientX;
@@ -235,36 +186,3 @@ MultiCursor.defaultProps = {
 };
 var _default = MultiCursor;
 exports["default"] = _default;
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.lerpPoint = exports.getDistance = exports.getPointOnCircle = void 0;
-
-var getPointOnCircle = function getPointOnCircle(theta, x, y, radius) {
-  var t = theta * (Math.PI / 180);
-  return {
-    x: x + radius * Math.cos(t),
-    y: y + radius * Math.sin(t)
-  };
-};
-
-exports.getPointOnCircle = getPointOnCircle;
-
-var getDistance = function getDistance(px1, py1, px2, py2) {
-  var dx = px2 - px1;
-  var dy = py2 - py1;
-  return Math.sqrt(dx * dx + dy * dy);
-};
-
-exports.getDistance = getDistance;
-
-var lerpPoint = function lerpPoint(start, target, factor) {
-  return {
-    x: (1 - factor) * start.x + factor * target.x,
-    y: (1 - factor) * start.y + factor * target.y
-  };
-};
-
-exports.lerpPoint = lerpPoint;

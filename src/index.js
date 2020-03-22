@@ -59,8 +59,8 @@ let RAF = null
 const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
   const cursorRefs = useRef([])
   const updatedCursors = []
-  const windowWidth = window !== undefined ? window.innerWidth : 0
-  const windowHeight = window !== undefined ? window.innerHeight : 0
+  const windowWidth = typeof window !== "undefined" ? window.innerWidth : 0
+  const windowHeight = typeof window !== "undefined" ? window.innerHeight : 0
   const center = {
     x: windowWidth / 2,
     y: windowHeight / 2

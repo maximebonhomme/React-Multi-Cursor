@@ -4,6 +4,14 @@ Add one or more custom cursors to your react app.
 
 Check it [live here](https://react-multi-cursor.bonhomme.dev).
 
+## Features
+
+- Create a single cursor
+- Add multiple cursors
+- Position them as you wish
+- Style each cursor individually
+- Add smooth easing to cursors
+
 ## Installation
 
 #### With npm `npm install react-multi-cursor`
