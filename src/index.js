@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import PropTypes from "prop-types"
+import PropTypes, { nominalTypeHack } from "prop-types"
 import throttle from "lodash/throttle"
 
 const getPointOnCircle = (theta, x, y, radius) => {
@@ -25,10 +25,14 @@ const lerpPoint = (start, target, factor) => {
   }
 }
 
-const cursorStyle = {
+const mandatoryCursorStyle = {
   position: "fixed",
   top: 0,
   left: 0,
+  pointerEvents: "none"
+}
+
+const cursorStyle = {
   width: "10px",
   height: "10px",
   margin: "-7px 0 0 -7px",
@@ -37,7 +41,13 @@ const cursorStyle = {
 }
 
 const Cursor = React.forwardRef(({ style, className }, ref) => {
-  return <div ref={ref} className={className} style={style} />
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{ ...mandatoryCursorStyle, ...style }}
+    />
+  )
 })
 
 Cursor.propTypes = {
@@ -56,7 +66,13 @@ Cursor.defaultProps = {
 }
 
 let RAF = null
-const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
+const MultiCursor = ({
+  cursors,
+  throttleDelay,
+  smoothness,
+  onUpdate,
+  onClick
+}) => {
   const cursorRefs = useRef([])
   const updatedCursors = []
   const windowWidth = typeof window !== "undefined" ? window.innerWidth : 0
@@ -69,7 +85,7 @@ const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
   let mouseLast = { x: 0, y: 0 }
   let mouse = { x: 0, y: 0 }
 
-  const mouseMove = e => {
+  const handleMouseMove = e => {
     const x = e.clientX
     const y = e.clientY
     const diff = {
@@ -86,6 +102,10 @@ const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
       x,
       y
     }
+  }
+
+  const handleClick = e => {
+    if (onClick) onClick(e, updatedCursors)
   }
 
   const getCursorPos = (c, m, i) => {
@@ -111,17 +131,19 @@ const MultiCursor = ({ cursors, throttleDelay, smoothness, onUpdate }) => {
       })
     }
 
-    onUpdate(updatedCursors)
+    if (onUpdate) onUpdate(updatedCursors)
 
     RAF = requestAnimationFrame(loop)
   }
 
   useEffect(() => {
-    const throttledMouseMove = throttle(mouseMove, throttleDelay)
+    const throttledMouseMove = throttle(handleMouseMove, throttleDelay)
     window.addEventListener("mousemove", throttledMouseMove)
+    window.addEventListener("click", handleClick)
 
     return () => {
       window.removeEventListener("mousemove", throttledMouseMove)
+      window.removeEventListener("click", handleClick)
     }
   }, [])
 
@@ -159,6 +181,7 @@ MultiCursor.propTypes = {
     })
   ),
   onUpdate: PropTypes.func,
+  onClick: PropTypes.func,
   throttleDelay: PropTypes.number,
   smoothness: PropTypes.number
 }
@@ -166,7 +189,8 @@ MultiCursor.propTypes = {
 MultiCursor.defaultProps = {
   throttleDelay: 10,
   smoothness: 1,
-  onUpdate: () => {}
+  onUpdate: null,
+  onClick: null
 }
 
 export default MultiCursor

@@ -9,7 +9,7 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _throttle = _interopRequireDefault(require("lodash/throttle"));
 
@@ -18,6 +18,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var getPointOnCircle = function getPointOnCircle(theta, x, y, radius) {
   var t = theta * (Math.PI / 180);
@@ -40,10 +46,13 @@ var lerpPoint = function lerpPoint(start, target, factor) {
   };
 };
 
-var cursorStyle = {
+var mandatoryCursorStyle = {
   position: "fixed",
   top: 0,
   left: 0,
+  pointerEvents: "none"
+};
+var cursorStyle = {
   width: "10px",
   height: "10px",
   margin: "-7px 0 0 -7px",
@@ -57,7 +66,7 @@ var Cursor = _react["default"].forwardRef(function (_ref, ref) {
   return /*#__PURE__*/_react["default"].createElement("div", {
     ref: ref,
     className: className,
-    style: style
+    style: _objectSpread({}, mandatoryCursorStyle, {}, style)
   });
 });
 
@@ -80,7 +89,8 @@ var MultiCursor = function MultiCursor(_ref2) {
   var cursors = _ref2.cursors,
       throttleDelay = _ref2.throttleDelay,
       smoothness = _ref2.smoothness,
-      onUpdate = _ref2.onUpdate;
+      onUpdate = _ref2.onUpdate,
+      onClick = _ref2.onClick;
   var cursorRefs = (0, _react.useRef)([]);
   var updatedCursors = [];
   var windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
@@ -102,7 +112,7 @@ var MultiCursor = function MultiCursor(_ref2) {
     y: 0
   };
 
-  var mouseMove = function mouseMove(e) {
+  var handleMouseMove = function handleMouseMove(e) {
     var x = e.clientX;
     var y = e.clientY;
     var diff = {
@@ -117,6 +127,10 @@ var MultiCursor = function MultiCursor(_ref2) {
       x: x,
       y: y
     };
+  };
+
+  var handleClick = function handleClick(e) {
+    if (onClick) onClick(e, updatedCursors);
   };
 
   var getCursorPos = function getCursorPos(c, m, i) {
@@ -139,15 +153,17 @@ var MultiCursor = function MultiCursor(_ref2) {
       });
     }
 
-    onUpdate(updatedCursors);
+    if (onUpdate) onUpdate(updatedCursors);
     RAF = requestAnimationFrame(loop);
   };
 
   (0, _react.useEffect)(function () {
-    var throttledMouseMove = (0, _throttle["default"])(mouseMove, throttleDelay);
+    var throttledMouseMove = (0, _throttle["default"])(handleMouseMove, throttleDelay);
     window.addEventListener("mousemove", throttledMouseMove);
+    window.addEventListener("click", handleClick);
     return function () {
       window.removeEventListener("mousemove", throttledMouseMove);
+      window.removeEventListener("click", handleClick);
     };
   }, []);
   (0, _react.useEffect)(function () {
@@ -176,13 +192,15 @@ MultiCursor.propTypes = {
     className: _propTypes["default"].string
   })),
   onUpdate: _propTypes["default"].func,
+  onClick: _propTypes["default"].func,
   throttleDelay: _propTypes["default"].number,
   smoothness: _propTypes["default"].number
 };
 MultiCursor.defaultProps = {
   throttleDelay: 10,
   smoothness: 1,
-  onUpdate: function onUpdate() {}
+  onUpdate: null,
+  onClick: null
 };
 var _default = MultiCursor;
 exports["default"] = _default;

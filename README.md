@@ -6,10 +6,9 @@ Check it [live here](https://react-multi-cursor.bonhomme.dev).
 
 ## Features
 
-- Create a single cursor
-- Add multiple cursors
-- Position them as you wish
+- Create a single or multiple cursors
 - Style each cursor individually
+- Position them as you wish
 - Add smooth easing to cursors
 
 ## Installation
@@ -27,10 +26,10 @@ import ReactMultiCursor from "react-multi-cursor"
 
 const cursors = [
   {
-    angle: 0,
+    angle: 0, // mouse position
   },
   {
-    angle: 180,
+    angle: 180, // opposite
   },
   ...
 ]
@@ -54,7 +53,7 @@ Array of objects to display cursors.
 const cursors = [
   {
     angle: 0,
-    style: { backgroundColor: 'red' }
+    style: { backgroundColor: 'red' },
     className: 'myCustomCursor'
   }
 ]
@@ -80,15 +79,29 @@ Mousemove event throttle delay
 <ReactMultiCursor cursors={cursors} throttleDelay={100} />
 ```
 
+### `onClick` | function | optional
+
+Function to call after click. The arguments will give you the original click event and the array of cursors and their position.
+
+```jsx
+<ReactMultiCursor
+  cursors={cursors}
+  onClick={(e, c) => {
+    console.log("event", e)
+    console.log("cursors", c)
+  }}
+/>
+```
+
 ### `onUpdate` | function | optional
 
-Function to call after each position update. The argument will give you each cursor position.
+Function to call after each position update. The argument will give you an array of cursors and their current position.
 
 ```jsx
 <ReactMultiCursor
   cursors={cursors}
   onUpdate={c => {
-    console.log(c)
+    console.log("cursors", c)
   }}
 />
 ```
