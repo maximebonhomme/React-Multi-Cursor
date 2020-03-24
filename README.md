@@ -79,9 +79,22 @@ Mousemove event throttle delay
 <ReactMultiCursor cursors={cursors} throttleDelay={100} />
 ```
 
+### `onUpdate` | function | optional
+
+Callback called after each position update. The argument will give you an array of cursors with their current position.
+
+```jsx
+<ReactMultiCursor
+  cursors={cursors}
+  onUpdate={c => {
+    console.log("cursors", c)
+  }}
+/>
+```
+
 ### `onClick` | function | optional
 
-Function to call after click. The arguments will give you the original click event and the array of cursors and their position.
+Click event callback. The arguments will give you the original event and the array of cursors with their position.
 
 ```jsx
 <ReactMultiCursor
@@ -93,14 +106,57 @@ Function to call after click. The arguments will give you the original click eve
 />
 ```
 
-### `onUpdate` | function | optional
+### `onTouchStart` | function | optional
 
-Function to call after each position update. The argument will give you an array of cursors and their current position.
+Touch start event callback. The arguments will give you the original event and the array of cursors with their position.
 
 ```jsx
 <ReactMultiCursor
   cursors={cursors}
-  onUpdate={c => {
+  onTouchStart={(e, c) => {
+    console.log("event", e)
+    console.log("cursors", c)
+  }}
+/>
+```
+
+### `onTouchMove` | function | optional
+
+Touch move event callback. The arguments will give you the original event and the array of cursors with their position.
+
+```jsx
+<ReactMultiCursor
+  cursors={cursors}
+  onTouchMove={(e, c) => {
+    console.log("event", e)
+    console.log("cursors", c)
+  }}
+/>
+```
+
+### `onTouchCancel` | function | optional
+
+Touch cancel event callback. The arguments will give you the original event and the array of cursors with their position.
+
+```jsx
+<ReactMultiCursor
+  cursors={cursors}
+  onTouchCancel={(e, c) => {
+    console.log("event", e)
+    console.log("cursors", c)
+  }}
+/>
+```
+
+### `onTouchEnd` | function | optional
+
+Touch end event callback. The arguments will give you the original event and the array of cursors with their position.
+
+```jsx
+<ReactMultiCursor
+  cursors={cursors}
+  onTouchEnd={(e, c) => {
+    console.log("event", e)
     console.log("cursors", c)
   }}
 />

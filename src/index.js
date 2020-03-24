@@ -71,7 +71,11 @@ const MultiCursor = ({
   throttleDelay,
   smoothness,
   onUpdate,
-  onClick
+  onClick,
+  onTouchStart,
+  onTouchMove,
+  onTouchCancel,
+  onTouchEnd
 }) => {
   const cursorRefs = useRef([])
   const updatedCursors = []
@@ -104,10 +108,6 @@ const MultiCursor = ({
     }
   }
 
-  const handleClick = e => {
-    if (onClick) onClick(e, updatedCursors)
-  }
-
   const getCursorPos = (c, m, i) => {
     const distance = getDistance(m.x, m.y, center.x, center.y)
     const angle = (Math.atan2(m.y - center.y, m.x - center.x) * 180) / Math.PI
@@ -136,14 +136,38 @@ const MultiCursor = ({
     RAF = requestAnimationFrame(loop)
   }
 
+  const handleClick = e => {
+    if (onClick) onClick(e, updatedCursors)
+  }
+  const handleTouchStart = e => {
+    if (onTouchStart) onTouchStart(e, updatedCursors)
+  }
+  const handleTouchEnd = e => {
+    if (onTouchEnd) onTouchEnd(e, updatedCursors)
+  }
+  const handleTouchCancel = e => {
+    if (onTouchCancel) onTouchCancel(e, updatedCursors)
+  }
+  const handleTouchMove = e => {
+    if (onTouchMove) onTouchMove(e, updatedCursors)
+  }
+
   useEffect(() => {
     const throttledMouseMove = throttle(handleMouseMove, throttleDelay)
     window.addEventListener("mousemove", throttledMouseMove)
     window.addEventListener("click", handleClick)
+    window.addEventListener("touchstart", handleTouchStart, false)
+    window.addEventListener("touchend", handleTouchEnd, false)
+    window.addEventListener("touchcancel", handleTouchCancel, false)
+    window.addEventListener("touchmove", handleTouchMove, false)
 
     return () => {
       window.removeEventListener("mousemove", throttledMouseMove)
       window.removeEventListener("click", handleClick)
+      window.removeEventListener("touchstart", handleTouchStart, false)
+      window.removeEventListener("touchend", handleTouchEnd, false)
+      window.removeEventListener("touchcancel", handleTouchCancel, false)
+      window.removeEventListener("touchmove", handleTouchMove, false)
     }
   }, [])
 
@@ -182,6 +206,10 @@ MultiCursor.propTypes = {
   ),
   onUpdate: PropTypes.func,
   onClick: PropTypes.func,
+  onTouchStart: PropTypes.func,
+  onTouchMove: PropTypes.func,
+  onTouchCancel: PropTypes.func,
+  onTouchEnd: PropTypes.func,
   throttleDelay: PropTypes.number,
   smoothness: PropTypes.number
 }
@@ -190,7 +218,11 @@ MultiCursor.defaultProps = {
   throttleDelay: 10,
   smoothness: 1,
   onUpdate: null,
-  onClick: null
+  onClick: null,
+  onTouchStart: null,
+  onTouchMove: null,
+  onTouchCancel: null,
+  onTouchEnd: null
 }
 
 export default MultiCursor

@@ -18,7 +18,7 @@ function App() {
 
   return (
     <div className="App">
-      <ReactMultiCursor onClick={callback} cursors={cursors} />
+      <ReactMultiCursor onTouchCancel={callback} cursors={cursors} />
     </div>
   )
 }

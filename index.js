@@ -90,7 +90,11 @@ var MultiCursor = function MultiCursor(_ref2) {
       throttleDelay = _ref2.throttleDelay,
       smoothness = _ref2.smoothness,
       onUpdate = _ref2.onUpdate,
-      onClick = _ref2.onClick;
+      onClick = _ref2.onClick,
+      onTouchStart = _ref2.onTouchStart,
+      onTouchMove = _ref2.onTouchMove,
+      onTouchCancel = _ref2.onTouchCancel,
+      onTouchEnd = _ref2.onTouchEnd;
   var cursorRefs = (0, _react.useRef)([]);
   var updatedCursors = [];
   var windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
@@ -129,10 +133,6 @@ var MultiCursor = function MultiCursor(_ref2) {
     };
   };
 
-  var handleClick = function handleClick(e) {
-    if (onClick) onClick(e, updatedCursors);
-  };
-
   var getCursorPos = function getCursorPos(c, m, i) {
     var distance = getDistance(m.x, m.y, center.x, center.y);
     var angle = Math.atan2(m.y - center.y, m.x - center.x) * 180 / Math.PI;
@@ -157,13 +157,41 @@ var MultiCursor = function MultiCursor(_ref2) {
     RAF = requestAnimationFrame(loop);
   };
 
+  var handleClick = function handleClick(e) {
+    if (onClick) onClick(e, updatedCursors);
+  };
+
+  var handleTouchStart = function handleTouchStart(e) {
+    if (onTouchStart) onTouchStart(e, updatedCursors);
+  };
+
+  var handleTouchEnd = function handleTouchEnd(e) {
+    if (onTouchEnd) onTouchEnd(e, updatedCursors);
+  };
+
+  var handleTouchCancel = function handleTouchCancel(e) {
+    if (onTouchCancel) onTouchCancel(e, updatedCursors);
+  };
+
+  var handleTouchMove = function handleTouchMove(e) {
+    if (onTouchMove) onTouchMove(e, updatedCursors);
+  };
+
   (0, _react.useEffect)(function () {
     var throttledMouseMove = (0, _throttle["default"])(handleMouseMove, throttleDelay);
     window.addEventListener("mousemove", throttledMouseMove);
     window.addEventListener("click", handleClick);
+    window.addEventListener("touchstart", handleTouchStart, false);
+    window.addEventListener("touchend", handleTouchEnd, false);
+    window.addEventListener("touchcancel", handleTouchCancel, false);
+    window.addEventListener("touchmove", handleTouchMove, false);
     return function () {
       window.removeEventListener("mousemove", throttledMouseMove);
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("touchstart", handleTouchStart, false);
+      window.removeEventListener("touchend", handleTouchEnd, false);
+      window.removeEventListener("touchcancel", handleTouchCancel, false);
+      window.removeEventListener("touchmove", handleTouchMove, false);
     };
   }, []);
   (0, _react.useEffect)(function () {
@@ -193,6 +221,10 @@ MultiCursor.propTypes = {
   })),
   onUpdate: _propTypes["default"].func,
   onClick: _propTypes["default"].func,
+  onTouchStart: _propTypes["default"].func,
+  onTouchMove: _propTypes["default"].func,
+  onTouchCancel: _propTypes["default"].func,
+  onTouchEnd: _propTypes["default"].func,
   throttleDelay: _propTypes["default"].number,
   smoothness: _propTypes["default"].number
 };
@@ -200,7 +232,11 @@ MultiCursor.defaultProps = {
   throttleDelay: 10,
   smoothness: 1,
   onUpdate: null,
-  onClick: null
+  onClick: null,
+  onTouchStart: null,
+  onTouchMove: null,
+  onTouchCancel: null,
+  onTouchEnd: null
 };
 var _default = MultiCursor;
 exports["default"] = _default;
