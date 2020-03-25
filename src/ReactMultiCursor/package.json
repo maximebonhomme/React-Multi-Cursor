@@ -1,6 +1,6 @@
 {
   "name": "react-multi-cursor",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Add multiple cursors to your react application.",
   "main": "dist.js",
   "scripts": {
