@@ -19,12 +19,6 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 var getPointOnCircle = function getPointOnCircle(theta, x, y, radius) {
   var t = theta * (Math.PI / 180);
   return {
@@ -63,11 +57,14 @@ var cursorStyle = {
 var Cursor = _react.default.forwardRef(function (_ref, ref) {
   var style = _ref.style,
       className = _ref.className;
+  console.log("ref", ref);
   return /*#__PURE__*/_react.default.createElement("div", {
     ref: ref,
-    className: className,
-    style: _objectSpread({}, mandatoryCursorStyle, {}, style)
-  });
+    style: mandatoryCursorStyle
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    style: style,
+    className: className
+  }));
 });
 
 Cursor.propTypes = {
@@ -89,6 +86,8 @@ var MultiCursor = function MultiCursor(_ref2) {
   var cursors = _ref2.cursors,
       throttleDelay = _ref2.throttleDelay,
       smoothness = _ref2.smoothness,
+      hoverItemClassName = _ref2.hoverItemClassName,
+      hoverCursorClassName = _ref2.hoverCursorClassName,
       onUpdate = _ref2.onUpdate,
       onClick = _ref2.onClick,
       onTouchStart = _ref2.onTouchStart,
@@ -157,6 +156,20 @@ var MultiCursor = function MultiCursor(_ref2) {
     RAF = requestAnimationFrame(loop);
   };
 
+  var handleMouseEnter = function handleMouseEnter() {
+    cursorRefs.current.forEach(function (c) {
+      c.firstElementChild.classList.add(hoverCursorClassName);
+    });
+  };
+
+  var handleMouseLeave = function handleMouseLeave() {
+    cursorRefs.current.forEach(function (c) {
+      if (c.firstElementChild.classList.contains(hoverCursorClassName)) {
+        c.firstElementChild.classList.remove(hoverCursorClassName);
+      }
+    });
+  };
+
   var handleClick = function handleClick(e) {
     if (onClick) onClick(e, updatedCursors);
   };
@@ -179,12 +192,17 @@ var MultiCursor = function MultiCursor(_ref2) {
 
   (0, _react.useEffect)(function () {
     var throttledMouseMove = (0, _throttle.default)(handleMouseMove, throttleDelay);
+    var hoverItem = document.querySelectorAll(".".concat(hoverItemClassName));
     window.addEventListener("mousemove", throttledMouseMove);
     window.addEventListener("click", handleClick);
     window.addEventListener("touchstart", handleTouchStart, false);
     window.addEventListener("touchend", handleTouchEnd, false);
     window.addEventListener("touchcancel", handleTouchCancel, false);
     window.addEventListener("touchmove", handleTouchMove, false);
+    hoverItem.forEach(function (h) {
+      h.addEventListener("mouseenter", handleMouseEnter);
+      h.addEventListener("mouseleave", handleMouseLeave);
+    });
     return function () {
       window.removeEventListener("mousemove", throttledMouseMove);
       window.removeEventListener("click", handleClick);
@@ -192,13 +210,16 @@ var MultiCursor = function MultiCursor(_ref2) {
       window.removeEventListener("touchend", handleTouchEnd, false);
       window.removeEventListener("touchcancel", handleTouchCancel, false);
       window.removeEventListener("touchmove", handleTouchMove, false);
+      hoverItem.forEach(function (h) {
+        h.removeEventListener("mouseenter", handleMouseEnter);
+        h.removeEventListener("mouseleave", handleMouseLeave);
+      });
     };
   }, []);
   (0, _react.useEffect)(function () {
     RAF = requestAnimationFrame(loop);
     return function () {
       window.cancelAnimationFrame(RAF);
-      RAF = null;
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, cursors.map(function (cursor, i) {
@@ -226,7 +247,9 @@ MultiCursor.propTypes = {
   onTouchCancel: _propTypes.default.func,
   onTouchEnd: _propTypes.default.func,
   throttleDelay: _propTypes.default.number,
-  smoothness: _propTypes.default.number
+  smoothness: _propTypes.default.number,
+  hoverItemClassName: _propTypes.default.string,
+  hoverCursorClassName: _propTypes.default.string
 };
 MultiCursor.defaultProps = {
   throttleDelay: 10,
@@ -236,7 +259,9 @@ MultiCursor.defaultProps = {
   onTouchStart: null,
   onTouchMove: null,
   onTouchCancel: null,
-  onTouchEnd: null
+  onTouchEnd: null,
+  hoverItemClassName: "multi-cursor-item",
+  hoverCursorClassName: "multi-cursor--hover"
 };
 var _default = MultiCursor;
 exports.default = _default;

@@ -79,6 +79,33 @@ Mousemove event throttle delay
 <ReactMultiCursor cursors={cursors} throttleDelay={100} />
 ```
 
+### `hoverItemClassName` | string | optional | default: "multi-cursor-item"
+
+ClassName to trigger hover state.
+
+It will add `multi-cursor--hover` className on each cursor by default.
+
+```jsx
+<div className="hover-item">Hover</div>
+```
+
+```jsx
+<ReactMultiCursor cursors={cursors} hoverItemClassName="hover-item" />
+```
+
+### `hoverCursorClassName` | string | optional | default: "multi-cursor--hover"
+
+Hover state className on each cursor.
+
+It will be added whenever a cursor hover over `.multi-cursor-item`
+
+```jsx
+<ReactMultiCursor
+  cursors={cursors}
+  hoverCursorClassName="myCustomCursor--hover"
+/>
+```
+
 ### `onUpdate` | function | optional
 
 Callback called after each position update. The argument will give you an array of cursors with their current position.
@@ -86,7 +113,7 @@ Callback called after each position update. The argument will give you an array 
 ```jsx
 <ReactMultiCursor
   cursors={cursors}
-  onUpdate={c => {
+  onUpdate={(c) => {
     console.log("cursors", c)
   }}
 />

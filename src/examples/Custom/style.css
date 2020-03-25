@@ -1,0 +1,30 @@
+.my-custom-cursor {
+  position: relative;
+  border: 1px solid black;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: -5px 0 0 -5px;
+  transition: transform 0.2s ease-in-out;
+  transform-origin: center;
+}
+.my-custom-cursor::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 3px;
+  height: 3px;
+  background-color: black;
+  border-radius: 50%;
+  transition: transform 0.2s 0.1s ease-in-out;
+  transform-origin: center;
+}
+
+.my-custom-cursor--hover {
+  transform: scale(2);
+}
+.my-custom-cursor--hover::after {
+  transform: translate(-50%, -50%) scale(1);
+}
