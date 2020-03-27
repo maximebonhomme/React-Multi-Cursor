@@ -153,6 +153,7 @@ const MultiCursor = ({
     if (onClick) onClick(e, updatedCursors)
   }
   const handleTouchStart = (e) => {
+    handleMouseMove(e.touches[0])
     if (onTouchStart) onTouchStart(e, updatedCursors)
   }
   const handleTouchEnd = (e) => {
@@ -162,6 +163,7 @@ const MultiCursor = ({
     if (onTouchCancel) onTouchCancel(e, updatedCursors)
   }
   const handleTouchMove = (e) => {
+    handleMouseMove(e.touches[0])
     if (onTouchMove) onTouchMove(e, updatedCursors)
   }
 

@@ -173,6 +173,7 @@ var MultiCursor = function MultiCursor(_ref2) {
   };
 
   var handleTouchStart = function handleTouchStart(e) {
+    handleMouseMove(e.touches[0]);
     if (onTouchStart) onTouchStart(e, updatedCursors);
   };
 
@@ -185,6 +186,7 @@ var MultiCursor = function MultiCursor(_ref2) {
   };
 
   var handleTouchMove = function handleTouchMove(e) {
+    handleMouseMove(e.touches[0]);
     if (onTouchMove) onTouchMove(e, updatedCursors);
   };
 
