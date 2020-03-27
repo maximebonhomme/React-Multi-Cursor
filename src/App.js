@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 
 import Basic from "./examples/Basic"
 import Custom from "./examples/Custom"
-// import Interactive from "./examples/Interactive"
+import Interactive from "./examples/Interactive"
 
 const examples = [
   {
@@ -16,11 +16,11 @@ const examples = [
     name: "Custom example",
     to: "/custom",
   },
-  // {
-  //   id: 2,
-  //   name: "Interactive example",
-  //   to: "/interactive",
-  // },
+  {
+    id: 2,
+    name: "Interactive example",
+    to: "/interactive",
+  },
 ]
 
 function App() {
@@ -46,9 +46,9 @@ function App() {
             <Route path="/custom">
               <Custom />
             </Route>
-            {/* <Route path="/interactive">
+            <Route path="/interactive">
               <Interactive />
-            </Route> */}
+            </Route>
           </Switch>
           <div className="nav-block nav-block--b">
             {reversedExamples.map(({ id, name, to }) => (

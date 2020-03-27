@@ -41,7 +41,6 @@ const cursorStyle = {
 }
 
 const Cursor = React.forwardRef(({ style, className }, ref) => {
-  console.log("ref", ref)
   return (
     <div ref={ref} style={mandatoryCursorStyle}>
       <div style={style} className={className} />

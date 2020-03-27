@@ -57,7 +57,6 @@ var cursorStyle = {
 var Cursor = _react.default.forwardRef(function (_ref, ref) {
   var style = _ref.style,
       className = _ref.className;
-  console.log("ref", ref);
   return /*#__PURE__*/_react.default.createElement("div", {
     ref: ref,
     style: mandatoryCursorStyle
