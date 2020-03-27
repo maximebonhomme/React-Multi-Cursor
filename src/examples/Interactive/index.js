@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useRef } from "react"
 import { useWindowSize } from "react-use"
 
+import QuadGrid from "../_components/QuadGrid"
 import MultiCursor from "../../ReactMultiCursor"
 
 const cursors = [
@@ -74,11 +75,15 @@ const Interactive = () => {
   }, [])
 
   return (
-    <div>
+    <>
       <MultiCursor
         smoothness={0.1}
         onUpdate={handleCursorUpdate}
         cursors={cursors}
+      />
+      <QuadGrid
+        title="See interactive example code"
+        href="https://github.com/maximebonhomme/React-Multi-Cursor/blob/master/src/examples/Interactive/index.js"
       />
       <canvas
         ref={canvasRef}
@@ -86,7 +91,7 @@ const Interactive = () => {
         height={height}
         className="interactive-canvas"
       />
-    </div>
+    </>
   )
 }
 

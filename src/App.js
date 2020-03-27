@@ -18,7 +18,7 @@ const examples = [
   },
   {
     id: 2,
-    name: "Interactive example",
+    name: "Interactive (click) example",
     to: "/interactive",
   },
 ]
