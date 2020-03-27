@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import PropTypes from "../../node_modules/prop-types"
 import throttle from "../../node_modules/lodash/throttle"
 
@@ -80,12 +80,6 @@ const MultiCursor = ({
 }) => {
   const cursorRefs = useRef([])
   const updatedCursors = []
-  const windowWidth = typeof window !== "undefined" ? window.innerWidth : 0
-  const windowHeight = typeof window !== "undefined" ? window.innerHeight : 0
-  const center = {
-    x: windowWidth / 2,
-    y: windowHeight / 2,
-  }
   let mouseTarget = { x: 0, y: 0 }
   let mouseLast = { x: 0, y: 0 }
   let mouse = { x: 0, y: 0 }
@@ -110,6 +104,10 @@ const MultiCursor = ({
   }
 
   const getCursorPos = (c, m, i) => {
+    const center = {
+      x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
+      y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+    }
     const distance = getDistance(m.x, m.y, center.x, center.y)
     const angle = (Math.atan2(m.y - center.y, m.x - center.x) * 180) / Math.PI
     const newAngle = angle + c.angle

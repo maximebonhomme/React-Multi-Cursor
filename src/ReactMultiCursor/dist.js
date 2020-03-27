@@ -96,12 +96,6 @@ var MultiCursor = function MultiCursor(_ref2) {
       onTouchEnd = _ref2.onTouchEnd;
   var cursorRefs = (0, _react.useRef)([]);
   var updatedCursors = [];
-  var windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
-  var windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
-  var center = {
-    x: windowWidth / 2,
-    y: windowHeight / 2
-  };
   var mouseTarget = {
     x: 0,
     y: 0
@@ -133,6 +127,10 @@ var MultiCursor = function MultiCursor(_ref2) {
   };
 
   var getCursorPos = function getCursorPos(c, m, i) {
+    var center = {
+      x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
+      y: typeof window !== "undefined" ? window.innerHeight / 2 : 0
+    };
     var distance = getDistance(m.x, m.y, center.x, center.y);
     var angle = Math.atan2(m.y - center.y, m.x - center.x) * 180 / Math.PI;
     var newAngle = angle + c.angle;
