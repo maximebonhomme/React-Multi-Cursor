@@ -30,6 +30,7 @@ const cursors = [
     angle: -135,
   },
 ]
+const CIRCLE_SIZE = 5
 
 // eslint-disable-next-line no-bitwise
 const randomHex = () => `#${((Math.random() * 0xffffff) << 0).toString(16)}`
@@ -37,15 +38,17 @@ const randomHex = () => `#${((Math.random() * 0xffffff) << 0).toString(16)}`
 const Interactive = () => {
   const { width, height } = useWindowSize()
   const isDrawing = useRef(false)
+  const pathColor = useRef(randomHex())
   const canvasRef = useRef(null)
 
-  const handleMouseDown = useCallback(() => {
+  const handleMouseDown = () => {
+    pathColor.current = randomHex()
     isDrawing.current = true
-  })
+  }
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = () => {
     isDrawing.current = false
-  })
+  }
 
   const handleCursorUpdate = useCallback(
     (c) => {
@@ -55,8 +58,8 @@ const Interactive = () => {
 
       c.forEach((cursor) => {
         ctx.beginPath()
-        ctx.arc(cursor.x, cursor.y, 7, 0, 2 * Math.PI)
-        ctx.fillStyle = randomHex()
+        ctx.arc(cursor.x, cursor.y, CIRCLE_SIZE, 0, 2 * Math.PI)
+        ctx.fillStyle = pathColor.current
         ctx.fill()
         ctx.closePath()
       })
