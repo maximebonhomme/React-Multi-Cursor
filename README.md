@@ -13,7 +13,7 @@ Check it [live here](https://react-multi-cursor.bonhomme.dev).
 
 ## Installation
 
-#### With npm `npm install react-multi-cursor`
+#### With npm `npm install react-multi-cursor --save`
 
 #### With yarn `yarn add react-multi-cursor`
 
